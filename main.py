@@ -7,6 +7,7 @@ client = bigquery.Client()
 table_id = "tanelis.tweets_stemmed.stem_words"
 
 #gcloud functions deploy stemmer --runtime python37 --trigger-topic stem_words --timeout 180s
+#TODO: update requirements.txt
 
 
 def pubsub_stem(event, context):
