@@ -6,6 +6,8 @@ stemmer = SnowballStemmer("finnish")
 client = bigquery.Client()
 table_id = "tanelis.tweets_stemmed.stem_words"
 
+#gcloud functions deploy stemmer --runtime python37 --trigger-topic stem_words --timeout 180s
+
 
 def pubsub_stem(event, context):
     """Triggered from a message on a Cloud Pub/Sub topic.
