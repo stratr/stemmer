@@ -6,8 +6,7 @@ stemmer = SnowballStemmer("finnish")
 client = bigquery.Client()
 table_id = "tanelis.tweets_stemmed.stem_words"
 
-#gcloud functions deploy stemmer --runtime python37 --trigger-topic stem_words --timeout 180s
-#TODO: update requirements.txt
+# gcloud functions deploy stemmer --runtime python37 --trigger-topic stem_words --timeout 180s
 
 
 def pubsub_stem(event, context):
@@ -31,18 +30,22 @@ def pubsub_stem(event, context):
 
         insert_rows.append(list_row)
 
-    # https://cloud.google.com/bigquery/streaming-data-into-bigquery
-
-    # TODO: optimize how the BQ view returns new tweets for the script without going through too many records
-
     errors = client.insert_rows(table, insert_rows)  # Make an API request.
     if errors == []:
         print("New rows have been added.")
     else:
         print(errors)
 
-    pubsub_message = base64.b64decode(event['data']).decode('utf-8')
-    print(pubsub_message)
+    # event data
+    if 'data' in event:
+        event_data = base64.b64decode(event['data']).decode('utf-8')
+    else:
+        event_data = 'no data in pub/sub event'
+    print('Event data: {}!'.format(event_data))
 
 
-#pubsub_stem('', '')
+def test():
+    pubsub_stem('', '')
+
+
+#test()
